@@ -17,8 +17,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 )
 public class TaskProcessingSystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TaskProcessingSystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TaskProcessingSystemApplication.class, args);
+    }
 
 }
