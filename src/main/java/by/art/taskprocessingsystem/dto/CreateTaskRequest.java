@@ -1,13 +1,34 @@
 package by.art.taskprocessingsystem.dto;
 
 import by.art.taskprocessingsystem.entity.TaskPriority;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record CreateTaskRequest(@NotBlank String name,
-                                String description,
-                                @NotNull TaskPriority priority,
-                                LocalDateTime executeAt) {
+public record CreateTaskRequest(
+        @Schema(
+                description = "Task name",
+                example = "Send email notification"
+        )
+        @NotBlank String name,
+
+        @Schema(
+                description = "Task description",
+                example = "Notify user about completed order"
+        )
+        String description,
+
+        @Schema(
+                description = "Task priority",
+                example = "HIGH"
+        )
+        @NotNull TaskPriority priority,
+
+        @Schema(
+                description = "Scheduled execution time",
+                example = "2026-06-30T10:00:00"
+        )
+        LocalDateTime executeAt) {
 }

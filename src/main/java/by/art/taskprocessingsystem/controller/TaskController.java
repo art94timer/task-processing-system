@@ -3,8 +3,16 @@ package by.art.taskprocessingsystem.controller;
 import by.art.taskprocessingsystem.dto.CreateTaskRequest;
 import by.art.taskprocessingsystem.dto.TaskResponse;
 import by.art.taskprocessingsystem.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -12,16 +20,34 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.base.url}/tasks")
 @RequiredArgsConstructor
+@Tag(name = "Tasks", description = "Task management API")
 public class TaskController {
 
     private final TaskService taskService;
 
     @PostMapping
+    @Operation(summary = "Create task")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Task successfully created",
+                    content = @Content(schema = @Schema(implementation = TaskResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Validation error",
+                    content = @Content(
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )),
+    })
+    @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse createTask(@Valid @RequestBody CreateTaskRequest request) {
         return taskService.createTask(request);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get task by id", responses =
+            {
+                    @ApiResponse(responseCode = "200", description = "Task successfully received",
+                            content = @Content(schema = @Schema(implementation = TaskResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Task not found",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+            })
     public TaskResponse getTask(@PathVariable UUID id) {
         return taskService.getTask(id);
     }
