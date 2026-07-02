@@ -3,10 +3,12 @@ package by.art.taskprocessingsystem.dto;
 import by.art.taskprocessingsystem.entity.TaskPriority;
 import by.art.taskprocessingsystem.entity.TaskStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder(toBuilder = true)
 public record TaskResponse(
         @Schema(
                 description = "Task identifier",
@@ -43,4 +45,5 @@ public record TaskResponse(
                 example = "2026-06-30T10:00:00"
         )
         LocalDateTime executeAt
-        ) { }
+) {
+}
