@@ -25,7 +25,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "tasks")
