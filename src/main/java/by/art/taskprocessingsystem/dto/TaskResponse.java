@@ -2,6 +2,7 @@ package by.art.taskprocessingsystem.dto;
 
 import by.art.taskprocessingsystem.entity.TaskPriority;
 import by.art.taskprocessingsystem.entity.TaskStatus;
+import by.art.taskprocessingsystem.entity.TaskType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -35,10 +36,28 @@ public record TaskResponse(
         TaskPriority priority,
 
         @Schema(
+                description = "Task type",
+                example = "EMAIL_NOTIFICATION"
+        )
+        TaskType type,
+
+        @Schema(
+                description = "Task payload",
+                example = "{\"email\": \"user@example.com\"}"
+        )
+        String payload,
+
+        @Schema(
                 description = "Task status",
                 example = "NEW"
         )
         TaskStatus status,
+
+        @Schema(
+                description = "Error message of last failure",
+                example = "Connection timed out"
+        )
+        String errorMessage,
 
         @Schema(
                 description = "Scheduled execution time",

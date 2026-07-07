@@ -8,8 +8,9 @@ import by.art.taskprocessingsystem.entity.Task;
 import by.art.taskprocessingsystem.exception.TaskNotFoundException;
 import by.art.taskprocessingsystem.mapper.TaskMapper;
 import by.art.taskprocessingsystem.repository.TaskRepository;
-import by.art.taskprocessingsystem.service.TaskService;
+import by.art.taskprocessingsystem.service.TaskCrudService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+public class TaskCrudServiceImpl implements TaskCrudService {
 
     private final TaskRepository repository;
     private final TaskMapper mapper;

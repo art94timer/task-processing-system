@@ -1,0 +1,5 @@
+ALTER TABLE tasks
+    ADD COLUMN type          VARCHAR(50) NOT NULL DEFAULT 'EMAIL_NOTIFICATION',
+    ADD COLUMN payload       TEXT,
+    ADD COLUMN error_message TEXT,
+    ADD COLUMN version       BIGINT      NOT NULL DEFAULT 0;

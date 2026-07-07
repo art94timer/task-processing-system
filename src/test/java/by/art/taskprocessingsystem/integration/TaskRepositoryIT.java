@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class TaskRepositoryIT extends AbstractIT {
 
     @Autowired
-    private TaskRepository taskRepository;
+    private TaskRepository repository;
 
 
     @Test
@@ -25,8 +25,8 @@ public class TaskRepositoryIT extends AbstractIT {
         Task task = TestData.getTask().toBuilder()
                 .id(null)
                 .build();
-        Task saved = taskRepository.save(task);
-        Optional<Task> found = taskRepository.findById(saved.getId());
+        Task saved = repository.save(task);
+        Optional<Task> found = repository.findById(saved.getId());
         assertThat(found).isPresent();
     }
 }

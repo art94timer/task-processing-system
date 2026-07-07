@@ -8,7 +8,7 @@ import by.art.taskprocessingsystem.entity.Task;
 import by.art.taskprocessingsystem.exception.TaskNotFoundException;
 import by.art.taskprocessingsystem.mapper.TaskMapper;
 import by.art.taskprocessingsystem.repository.TaskRepository;
-import by.art.taskprocessingsystem.service.impl.TaskServiceImpl;
+import by.art.taskprocessingsystem.service.impl.TaskCrudServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -26,14 +26,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TaskServiceImplTest {
+class TaskCrudServiceImplTest {
 
     @Mock
     private TaskRepository taskRepository;
     @Spy
     private TaskMapper taskMapper = Mappers.getMapper(TaskMapper.class);
     @InjectMocks
-    private TaskServiceImpl taskService;
+    private TaskCrudServiceImpl taskService;
 
     @Test
     void shouldCreateTask() {
