@@ -1,6 +1,7 @@
 package by.art.taskprocessingsystem.dto;
 
 import by.art.taskprocessingsystem.entity.TaskPriority;
+import by.art.taskprocessingsystem.entity.TaskType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,18 @@ public record CreateTaskRequest(
                 example = "HIGH"
         )
         @NotNull TaskPriority priority,
+
+        @Schema(
+                description = "Task type",
+                example = "EMAIL_NOTIFICATION"
+        )
+        @NotNull TaskType type,
+
+        @Schema(
+                description = "Task payload",
+                example = "{\"email\": \"user@example.com\"}"
+        )
+        String payload,
 
         @Schema(
                 description = "Scheduled execution time",

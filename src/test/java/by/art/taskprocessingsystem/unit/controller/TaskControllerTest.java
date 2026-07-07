@@ -7,7 +7,7 @@ import by.art.taskprocessingsystem.dto.TaskResponse;
 import by.art.taskprocessingsystem.dto.UpdateTaskRequest;
 import by.art.taskprocessingsystem.entity.TaskStatus;
 import by.art.taskprocessingsystem.exception.TaskNotFoundException;
-import by.art.taskprocessingsystem.service.TaskService;
+import by.art.taskprocessingsystem.service.TaskCrudService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ class TaskControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private TaskService taskService;
+    private TaskCrudService taskCrudService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -49,7 +49,7 @@ class TaskControllerTest {
     void shouldCreateTask() throws Exception {
         CreateTaskRequest createTaskRequest = TestData.getCreateTaskRequest();
         TaskResponse taskResponse = TestData.getTaskResponse();
-        when(taskService.createTask(any(CreateTaskRequest.class)))
+        when(taskCrudService.createTask(any(CreateTaskRequest.class)))
                 .thenReturn(taskResponse);
         MvcResult mvcResult = mockMvc.perform(post(restApiUrl)
                         .content(objectMapper.writeValueAsBytes(createTaskRequest))
@@ -58,7 +58,7 @@ class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        verify(taskService, times(1)).createTask(any(CreateTaskRequest.class));
+        verify(taskCrudService, times(1)).createTask(any(CreateTaskRequest.class));
 
         TaskResponse actual = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResponse.class);
         assertThat(actual).isEqualTo(taskResponse);
@@ -72,32 +72,32 @@ class TaskControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-        verify(taskService, never()).createTask(any(CreateTaskRequest.class));
+        verify(taskCrudService, never()).createTask(any(CreateTaskRequest.class));
     }
 
     @Test
     void shouldReturnTask() throws Exception {
         TaskResponse taskResponse = TestData.getTaskResponse();
-        when(taskService.getTask(taskResponse.id())).thenReturn(taskResponse);
+        when(taskCrudService.getTask(taskResponse.id())).thenReturn(taskResponse);
         MvcResult mvcResult = mockMvc.perform(get(String.join("/", restApiUrl, taskResponse.id().toString()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andReturn();
         TaskResponse actual = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResponse.class);
 
-        verify(taskService, times(1)).getTask(any(UUID.class));
+        verify(taskCrudService, times(1)).getTask(any(UUID.class));
         assertThat(actual).isEqualTo(taskResponse);
     }
 
     @Test
     void shouldReturnNotFoundIfTaskDoesNotExist() throws Exception {
-        when(taskService.getTask(any(UUID.class))).thenThrow(TaskNotFoundException.class);
+        when(taskCrudService.getTask(any(UUID.class))).thenThrow(TaskNotFoundException.class);
         mockMvc.perform(get(String.join("/", restApiUrl, UUID.randomUUID().toString()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        verify(taskService, times(1)).getTask(any(UUID.class));
+        verify(taskCrudService, times(1)).getTask(any(UUID.class));
     }
 
     @Test
@@ -107,13 +107,13 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        verify(taskService, times(1)).getTasks(any(Pageable.class));
+        verify(taskCrudService, times(1)).getTasks(any(Pageable.class));
     }
 
     @Test
     void shouldUpdateTask() throws Exception {
         UpdateTaskRequest updateTaskRequest = TestData.getUpdateTaskRequest();
-        when(taskService.updateTask(any(UUID.class), any(UpdateTaskRequest.class))).thenReturn(
+        when(taskCrudService.updateTask(any(UUID.class), any(UpdateTaskRequest.class))).thenReturn(
                 TestData.getTaskResponse()
                         .toBuilder()
                         .status(TaskStatus.DONE)
@@ -126,14 +126,14 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.status").value(updateTaskRequest.status().toString()));
 
-        verify(taskService, times(1)).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
+        verify(taskCrudService, times(1)).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
 
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNotExistingTask() throws Exception {
         UpdateTaskRequest updateTaskRequest = TestData.getUpdateTaskRequest();
-        when(taskService.updateTask(any(UUID.class), any(UpdateTaskRequest.class))).thenThrow(TaskNotFoundException.class);
+        when(taskCrudService.updateTask(any(UUID.class), any(UpdateTaskRequest.class))).thenThrow(TaskNotFoundException.class);
 
         mockMvc.perform(patch(String.join("/", restApiUrl, UUID.randomUUID().toString()))
                         .content(objectMapper.writeValueAsBytes(updateTaskRequest))
@@ -141,7 +141,7 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        verify(taskService, times(1)).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
+        verify(taskCrudService, times(1)).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
 
     }
 
@@ -155,6 +155,6 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        verify(taskService, never()).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
+        verify(taskCrudService, never()).updateTask(any(UUID.class), any(UpdateTaskRequest.class));
     }
 }

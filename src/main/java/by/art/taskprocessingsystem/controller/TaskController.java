@@ -5,7 +5,7 @@ import by.art.taskprocessingsystem.dto.CreateTaskRequest;
 import by.art.taskprocessingsystem.dto.PageResponse;
 import by.art.taskprocessingsystem.dto.TaskResponse;
 import by.art.taskprocessingsystem.dto.UpdateTaskRequest;
-import by.art.taskprocessingsystem.service.TaskService;
+import by.art.taskprocessingsystem.service.TaskCrudService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +36,7 @@ import java.util.UUID;
 @Tag(name = "Tasks", description = "Task management API")
 public class TaskController {
 
-    private final TaskService taskService;
+    private final TaskCrudService taskCrudService;
 
     @PostMapping
     @Operation(summary = "Create task")
@@ -50,7 +50,7 @@ public class TaskController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse createTask(@Valid @RequestBody CreateTaskRequest request) {
-        return taskService.createTask(request);
+        return taskCrudService.createTask(request);
     }
 
     @GetMapping("/{id}")
@@ -62,7 +62,7 @@ public class TaskController {
                             content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
             })
     public TaskResponse getTask(@PathVariable UUID id) {
-        return taskService.getTask(id);
+        return taskCrudService.getTask(id);
     }
 
     @GetMapping
@@ -76,7 +76,7 @@ public class TaskController {
             })
     public PageResponse<TaskResponse> getTasks(@ParameterObject @PageableDefault(
             size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return taskService.getTasks(pageable);
+        return taskCrudService.getTasks(pageable);
     }
 
     @PatchMapping("/{id}")
@@ -91,6 +91,6 @@ public class TaskController {
             })
     @ResponseStatus(HttpStatus.OK)
     public TaskResponse updateTask(@PathVariable UUID id, @Valid @RequestBody UpdateTaskRequest request) {
-        return taskService.updateTask(id, request);
+        return taskCrudService.updateTask(id, request);
     }
 }

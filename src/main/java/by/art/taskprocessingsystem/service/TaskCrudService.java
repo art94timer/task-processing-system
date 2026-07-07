@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
-public interface TaskService {
+public interface TaskCrudService {
 
     TaskResponse createTask(CreateTaskRequest request);
 

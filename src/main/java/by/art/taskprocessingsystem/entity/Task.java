@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +45,17 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
+    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private TaskType type = TaskType.EMAIL_NOTIFICATION;
+
+    @Column(columnDefinition = "text")
+    private String payload;
+
+    @Column(name = "error_message", columnDefinition = "text")
+    private String errorMessage;
+
     @Column(nullable = false, columnDefinition = "varchar(20)")
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -63,4 +75,34 @@ public class Task {
     @LastModifiedDate
     @Column(nullable = false, columnDefinition = "timestamp default now()")
     private LocalDateTime updatedAt;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
+
+    public void markProcessing() {
+        this.status = TaskStatus.PROCESSING;
+    }
+
+    public void complete() {
+        this.status = TaskStatus.DONE;
+    }
+
+    public boolean canRetry(int maxRetries) {
+        return retryCount < maxRetries;
+    }
+
+    public void scheduleRetry(String reason, LocalDateTime nextExecuteAt) {
+        this.retryCount = this.retryCount + 1;
+        this.errorMessage = reason;
+        this.status = TaskStatus.NEW;
+        this.executeAt = nextExecuteAt;
+    }
+
+    public void failPermanently(String reason) {
+        this.retryCount = this.retryCount + 1;
+        this.errorMessage = reason;
+        this.status = TaskStatus.FAILED;
+    }
 }
