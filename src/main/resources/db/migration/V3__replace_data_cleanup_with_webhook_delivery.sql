@@ -1,0 +1,3 @@
+UPDATE tasks
+SET type = 'WEBHOOK_DELIVERY'
+WHERE type = 'DATA_CLEANUP';

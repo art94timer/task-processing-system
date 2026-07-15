@@ -5,6 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Task type")
 public enum TaskType {
     EMAIL_NOTIFICATION,
-    DATA_CLEANUP,
+    WEBHOOK_DELIVERY,
     GENERATE_REPORT
 }

@@ -29,7 +29,7 @@ class TaskHandlerRegistryTest {
     @Test
     void shouldReturnEmptyOptionalWhenHandlerNotFound() {
         TaskHandlerRegistry registry = new TaskHandlerRegistry(List.of());
-        Optional<TaskHandler> result = registry.getHandler(TaskType.DATA_CLEANUP);
+        Optional<TaskHandler> result = registry.getHandler(TaskType.WEBHOOK_DELIVERY);
         assertThat(result).isEmpty();
     }
 
