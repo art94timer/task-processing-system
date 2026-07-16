@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,6 +45,16 @@ public class Task {
     @Column(nullable = false, columnDefinition = "varchar(20)")
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
+
+    @Formula("""
+            CASE priority
+              WHEN 'HIGH' then 3
+              WHEN 'MEDIUM' then 2
+              WHEN 'LOW' then 1
+              ELSE 0
+            END
+            """)
+    private int priorityWeight;
 
     @Column(nullable = false, columnDefinition = "varchar(50)")
     @Enumerated(EnumType.STRING)
